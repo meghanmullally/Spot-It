@@ -20,6 +20,10 @@ module.exports = function(sequelize, DataTypes) {
       validate: {
         len: [1]
       }
+    },
+    category: {
+      type: DataTypes.STRING,
+      defaultValue: "Discussion"
     }
   });
   return Post;
