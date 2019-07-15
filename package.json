@@ -17,5 +17,15 @@
   "devDependencies": {
     "cross-env": "^5.2.0",
     "prettier": "^1.17.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meghanmullally/Spot-It.git"
+  },
+  "keywords": [],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/meghanmullally/Spot-It/issues"
+  },
+  "homepage": "https://github.com/meghanmullally/Spot-It#readme"
 }
