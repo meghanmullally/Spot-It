@@ -1,24 +1,20 @@
 module.exports = function(sequelize, DataTypes) {
-  var Post = sequelize.define("Post", {
-    title: {
+  var Forum = sequelize.define("Forum", {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [1]
+        len: [1,50]
       }
     },
-    body: {
+    description: {
       type: DataTypes.TEXT,
       allowNull: false,
       validate: {
-        len: [1]
+        len: [1,200]
       }
-    },
-    category: {
-      type: DataTypes.STRING,
-      defaultValue: "Discussion"
     }
   });
-  return Post;
+  return Forum;
   };
 
