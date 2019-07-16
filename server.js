@@ -12,7 +12,7 @@ var cookieParser = require('cookie-parser');
 var db = require("./models");
 
 var app = express();
-var PORT = process.env.PORT || 8888;
+var PORT = process.env.PORT || 3000;
 
 
 // Spotify IDs
@@ -178,9 +178,7 @@ app.get('/refresh_token', function (req, res) {
   });
 });
 
-console.log('Listening on 8888');
-app.listen(8888);
-
+console.log('Listening on 3000');
 
 
 // Starting the server, syncing our models ------------------------------------/
