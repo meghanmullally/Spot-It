@@ -73,4 +73,32 @@ module.exports = function(app) {
         res.json(dbPost);
       });
   });
+  app.post("/api/forums", function(req, res) {
+    console.log(req.body);
+    db.Forum.create({
+      name: req.body.name,
+      description: req.body.description
+    })
+      .then(function(dbForum) {
+        res.json(dbForum);
+      });
+  });
+  app.get("/api/forums", function(req, res) {
+    db.Forum.findAll({})
+      .then(function(dbForum) {
+        res.json(dbForum);
+      });
+  });
+
+  // Get route for retrieving a single post
+  app.get("/api/forums/:id", function(req, res) {
+    db.Forum.findOne({
+      where: {
+        id: req.params.id
+      }
+    })
+      .then(function(dbForum) {
+        res.json(dbForum);
+      });
+  });
 };

@@ -1,6 +1,7 @@
 var db = require("../models");
 var path = require("path");
 
+
 var isAuthenticated = require("../config/middleware/isAuthenticated");
 
 module.exports = function(app) {
@@ -30,6 +31,7 @@ module.exports = function(app) {
 };
 module.exports1 = function(app) {
 
+
   // Each of the below routes just handles the HTML page that the user gets sent to.
 
   // index route loads view.html
@@ -46,4 +48,7 @@ module.exports1 = function(app) {
     res.sendFile(path.join(__dirname, "../public/blog.html"));
   });
 
+  app.get("/forums", function(req,res){
+    res.render('forums')
+  })
 };
