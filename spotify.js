@@ -19,11 +19,7 @@ var client_secret = process.env.CLIENT_SECRET;
 // redirect uri
 var redirect_uri = process.env.REDIRECT_URI; 
 
-/*
- * Generates a random string containing numbers and letters
- * @param  {number} length The length of the string
- * @return {string} The generated string
- */
+
 
 var generateRandomString = function (length) {
   var text = '';
@@ -53,9 +49,9 @@ app.get('/login', function (req, res) {
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
-      client_id: client_id,
+      client_id: process.env.CLIENT_ID,
       scope: scope,
-      redirect_uri: redirect_uri,
+      redirect_uri: process.env.REDIRECT_URI,
       state: state
     }));
 });
@@ -80,7 +76,7 @@ app.get('/callback', function (req, res) {
       url: 'https://accounts.spotify.com/api/token',
       form: {
         code: code,
-        redirect_uri: redirect_uri,
+        redirect_uri: process.env.REDIRECT_URI,
         grant_type: 'authorization_code'
       },
       headers: {
