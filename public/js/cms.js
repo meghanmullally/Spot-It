@@ -29,7 +29,6 @@ $(document).ready(function() {
       // Constructing a newPost object to hand to the database
       var newPost = {
         title: titleInput.val().trim(),
-        user: userInput.val().trim(),
         body: bodyInput.val().trim(),
         category: postCategorySelect.val()
       };
@@ -61,7 +60,6 @@ $(document).ready(function() {
           // If this post exists, prefill our cms forms with its data
           titleInput.val(data.title);
           bodyInput.val(data.body);
-          userInput.val(data.user).trim(),
           postCategorySelect.val(data.category);
           // If we have a post with this id, set a flag for us to know to update the post
           // when we hit submit
