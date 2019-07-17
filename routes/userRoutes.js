@@ -1,169 +1,169 @@
-var db = require("../models");
-var passport = require("../config/passport");
+// var db = require("../models");
+// var passport = require("../config/passport");
 
-var isAuthenticated = require("../config/middleware/isAuthenticated");
+// var isAuthenticated = require("../config/middleware/isAuthenticated");
 
-module.exports = function (app) {
+// module.exports = function (app) {
 
-    app.get("/signup",
-        function (req, res) {
-            if (req.user) {
-                res.redirect("/");
-            }
+//     app.get("/signup",
+//         function (req, res) {
+//             if (req.user) {
+//                 res.redirect("/");
+//             }
 
-            res.status(200).render("signup");
-        }
-    );
+//             res.status(200).render("signup");
+//         }
+//     );
 
-    app.post("/signup", 
-        function (req, res) {
-            db.User.create({
-                userName: req.body.user_name,
-                firstName: req.body.first_name,
-                lastName: req.body.last_name,
-                email: req.body.email,
-                password: req.body.password
-            })
-            .then(function () {
-                res.redirect(302, "/login");  // temporary redirect
-            })
-            .catch(function (err) {
-                console.log(err);
-                res.render(401); // unauthorized
-            });
-        }
-    );
+//     app.post("/signup", 
+//         function (req, res) {
+//             db.User.create({
+//                 userName: req.body.user_name,
+//                 firstName: req.body.first_name,
+//                 lastName: req.body.last_name,
+//                 email: req.body.email,
+//                 password: req.body.password
+//             })
+//             .then(function () {
+//                 res.redirect(302, "/login");  // temporary redirect
+//             })
+//             .catch(function (err) {
+//                 console.log(err);
+//                 res.render(401); // unauthorized
+//             });
+//         }
+//     );
 
-    app.get("/login",
-        function (req, res) {
-            if (req.user) {
-                res.redirect("/");
-            }
+//     app.get("/login",
+//         function (req, res) {
+//             if (req.user) {
+//                 res.redirect("/");
+//             }
 
-            res.status(200).render("login");
-        }
-    );
+//             res.status(200).render("login");
+//         }
+//     );
 
-    app.post("/login",
-        passport.authenticate("local"),
-        function (req, res) {
-            res.redirect(302, "/");
-        }
-    );
+//     app.post("/login",
+//         passport.authenticate("local"),
+//         function (req, res) {
+//             res.redirect(302, "/");
+//         }
+//     );
 
-    app.get("/profile",
-        isAuthenticated,
-        function (req, res) {
-            var user = {
-                id: req.user.id,
-                userName: req.user.userName,
-                firstName: req.user.firstName,
-                lastName: req.user.lastName,
-                email: req.user.email
-            };
+//     app.get("/profile",
+//         isAuthenticated,
+//         function (req, res) {
+//             var user = {
+//                 id: req.user.id,
+//                 userName: req.user.userName,
+//                 firstName: req.user.firstName,
+//                 lastName: req.user.lastName,
+//                 email: req.user.email
+//             };
 
-            res.status(200).render("profile", { user: user });
-        }
-    );
+//             res.status(200).render("profile", { user: user });
+//         }
+//     );
 
-    app.post("/profile",
-        isAuthenticated,
-        function (req, res) {
-            var userId = req.user.id;
+//     app.post("/profile",
+//         isAuthenticated,
+//         function (req, res) {
+//             var userId = req.user.id;
 
-            var newInfo = {
-                id: userId,
-                firstName: req.body.first_name,
-                lastName: req.body.last_name,
-                email: req.body.email,
-                password: req.body.password
-            };
+//             var newInfo = {
+//                 id: userId,
+//                 firstName: req.body.first_name,
+//                 lastName: req.body.last_name,
+//                 email: req.body.email,
+//                 password: req.body.password
+//             };
 
-            db.User.update(
-                {
-                    firstName: newInfo.firstName,
-                    lastName: newInfo.lastName,
-                    email: newInfo.email,
-                    password: newInfo.password
-                },
-                {
-                    where: {
-                        id: userId
-                    },
-                    individualHooks: true
-                } 
-            )
-            .then(function(rowsUpdated) {
-                res.redirect(302, "/profile");
-            })
-            .catch(function(err) {
-                console.log(err);
-            });
-        }
-    );
+//             db.User.update(
+//                 {
+//                     firstName: newInfo.firstName,
+//                     lastName: newInfo.lastName,
+//                     email: newInfo.email,
+//                     password: newInfo.password
+//                 },
+//                 {
+//                     where: {
+//                         id: userId
+//                     },
+//                     individualHooks: true
+//                 } 
+//             )
+//             .then(function(rowsUpdated) {
+//                 res.redirect(302, "/profile");
+//             })
+//             .catch(function(err) {
+//                 console.log(err);
+//             });
+//         }
+//     );
 
-    app.get("/editprofile",
-        isAuthenticated,
-        function (req, res) {
-            var user = {
-                id: req.user.id,
-                userName: req.user.userName,
-                firstName: req.user.firstName,
-                lastName: req.user.lastName,
-                email: req.user.email
-            };
+//     app.get("/editprofile",
+//         isAuthenticated,
+//         function (req, res) {
+//             var user = {
+//                 id: req.user.id,
+//                 userName: req.user.userName,
+//                 firstName: req.user.firstName,
+//                 lastName: req.user.lastName,
+//                 email: req.user.email
+//             };
 
-            res.status(200).render("editprofile", { user: user });
-        }
-    );
+//             res.status(200).render("editprofile", { user: user });
+//         }
+//     );
 
 
-    app.get("/changepassword",
-        isAuthenticated,
-        function(req, res) {
-            res.status(200).render("changePassword");
-        });
+//     app.get("/changepassword",
+//         isAuthenticated,
+//         function(req, res) {
+//             res.status(200).render("changePassword");
+//         });
 
-    app.post("/changepassword",
-        isAuthenticated,
-        function(req, res) {
-            var userId = req.user.id;
-            var oldPassword = req.body.oPassword;
-            var newPassword = req.body.nPassword;
+//     app.post("/changepassword",
+//         isAuthenticated,
+//         function(req, res) {
+//             var userId = req.user.id;
+//             var oldPassword = req.body.oPassword;
+//             var newPassword = req.body.nPassword;
 
-            db.User.findByPk(userId)
-            .then(function(user) {
-                if (!user.isPasswordValid(oldPassword)) {
-                    req.logout();
-                    req.redirect(302, "/login");
-                    return;
-                }
+//             db.User.findByPk(userId)
+//             .then(function(user) {
+//                 if (!user.isPasswordValid(oldPassword)) {
+//                     req.logout();
+//                     req.redirect(302, "/login");
+//                     return;
+//                 }
     
-                return;
-                db.User.update(
-                    {
-                        password: newPassword
-                    },
-                    {
-                        where: {
-                            id: user.id
-                        }
-                    }
-                )
-                .then(function () {
-                    res.redirect(302, "/changepassword");  // temporary redirect
-                })
-                .catch(function (err) {
-                    res.render(401); // unauthorized
-                });
-            })
-        });
+//                 return;
+//                 db.User.update(
+//                     {
+//                         password: newPassword
+//                     },
+//                     {
+//                         where: {
+//                             id: user.id
+//                         }
+//                     }
+//                 )
+//                 .then(function () {
+//                     res.redirect(302, "/changepassword");  // temporary redirect
+//                 })
+//                 .catch(function (err) {
+//                     res.render(401); // unauthorized
+//                 });
+//             })
+//         });
 
-    app.get("/logout",
-        function (req, res) {
-            req.logout();
-            res.redirect("/");
-        }
-    );
+//     app.get("/logout",
+//         function (req, res) {
+//             req.logout();
+//             res.redirect("/");
+//         }
+//     );
 
-};
+// };
