@@ -28,6 +28,7 @@ module.exports = function (app) {
                 res.redirect(302, "/login");  // temporary redirect
             })
             .catch(function (err) {
+                console.log(err);
                 res.render(401); // unauthorized
             });
         }
