@@ -7,6 +7,7 @@ var request = require('request'); // "Request" library
 var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
+var session = require('express-session')
 
 
 var db = require("./models");
