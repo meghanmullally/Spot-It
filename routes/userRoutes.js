@@ -28,6 +28,7 @@ module.exports = function (app) {
                 res.redirect(302, "/login");  // temporary redirect
             })
             .catch(function (err) {
+                console.log(err);
                 res.render(401); // unauthorized
             });
         }
@@ -46,11 +47,11 @@ module.exports = function (app) {
     app.post("/login",
         passport.authenticate("local"),
         function (req, res) {
-            res.redirect(302, "/");
+            res.redirect(302, "/blog.html");
         }
     );
 
-    app.get("/userprofile",
+    app.get("/profile",
         isAuthenticated,
         function (req, res) {
             var user = {
@@ -61,9 +62,61 @@ module.exports = function (app) {
                 email: req.user.email
             };
 
-            res.status(200).render("userprofile", { user: user });
+            res.status(200).render("profile", { user: user });
         }
     );
+
+    app.post("/profile",
+        isAuthenticated,
+        function (req, res) {
+            var userId = req.user.id;
+
+            var newInfo = {
+                id: userId,
+                firstName: req.body.first_name,
+                lastName: req.body.last_name,
+                email: req.body.email,
+                password: req.body.password
+            };
+
+            db.User.update(
+                {
+                    firstName: newInfo.firstName,
+                    lastName: newInfo.lastName,
+                    email: newInfo.email,
+                    password: newInfo.password
+                },
+                {
+                    where: {
+                        id: userId
+                    },
+                    individualHooks: true
+                } 
+            )
+            .then(function(rowsUpdated) {
+                res.redirect(302, "/profile");
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+        }
+    );
+
+    app.get("/editprofile",
+        isAuthenticated,
+        function (req, res) {
+            var user = {
+                id: req.user.id,
+                userName: req.user.userName,
+                firstName: req.user.firstName,
+                lastName: req.user.lastName,
+                email: req.user.email
+            };
+
+            res.status(200).render("editprofile", { user: user });
+        }
+    );
+
 
     app.get("/changepassword",
         isAuthenticated,

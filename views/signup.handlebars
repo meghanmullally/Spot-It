@@ -1,43 +1,48 @@
-<form name="signupForm" action="signup" method="post">
-    <div class="container">
-        <h3>Sign Up</h3>
-        <div class="row">
-            <div class="input-field col s6">
-                User Name:
-                <input type="text" name="user_name" required>
-                <label for="user_name"></label>
+<div class="container p-4">
+    <div class="row">
+
+        <div class="col-md-4 mx-auto">
+            <div class="card text-center">
+                <div class="card-header">
+                    <h3></h3>
+                </div>
+
+                <img src="https://cdn.startselect.com/production/products/images/b1f68/43169/1145617560-360x360.jpg" alt="SPOT-IT" class="card-img-top mx-auto m-2 rounded-circle w-50">
+
+                <div class="card-body">
+
+                    <form action="/signup" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="first_name" placeholder="First Name" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="last_name" placeholder="Last Name" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="user_name" placeholder="Username" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="password" name="password" placeholder="Password" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Email" class="form-control">
+                        </div>
+
+                        <p>Already have an account?<br/>
+                        <a href="/login">LogIn</a></p>
+                </div>
+                
+                <button class="btn btn-primary btn-block">
+                    SingUp
+                </button>
+                </form>
+
+
             </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s6">
-                First Name:
-                <input type="text" name="first_name" required>
-                <label for="first_name"></label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s6">
-                Last Name:
-                <input type="text" name="last_name" required>
-                <label for="last_name"></label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s6">
-                Email:
-                <input type="email" name="email" required>
-                <label for="email"></label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s6">
-                Password:
-                <input type="password" name="password" required>
-                <label for="password"></label>
-            </div>
-        </div>
-        <div class="row">
-            <button class="btn" type="submit">Sign Up</button>
         </div>
     </div>
-</form>
+</div>
