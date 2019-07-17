@@ -18,14 +18,16 @@ var PORT = process.env.PORT || 3000;
 // Spotify IDs
 
 // client id
-var client_id = process.env.CLIENT_ID; 
+var client_id = process.env.CLIENT_ID;
 // secret id
-var client_secret = process.env.CLIENT_SECRET; 
+var client_secret = process.env.CLIENT_SECRET;
 // redirect uri
-var redirect_uri = process.env.REDIRECT_URI; 
+var redirect_uri = process.env.REDIRECT_URI;
 
 // Middleware
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
 app.use(express.json());
 app.use(express.static("public"));
 
@@ -42,7 +44,9 @@ app.set("view engine", "handlebars");
 require("./routes/apiRoutes")(app);
 require("./routes/htmlRoutes")(app);
 
-var syncOptions = { force: false };
+var syncOptions = {
+  force: false
+};
 
 // If running a test, set syncOptions.force to true
 // clearing the `testdb`
@@ -51,7 +55,7 @@ if (process.env.NODE_ENV === "test") {
 }
 
 
-// SPOTIFY CODE 
+// SPOTIFY LOGIN IN AUTHORIZATION CODE 
 
 var generateRandomString = function (length) {
   var text = '';
@@ -76,8 +80,8 @@ app.get('/login', function (req, res) {
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  // your application requests authorization
-  var scope = 'user-read-private user-read-email';
+  //  application requests authorization
+  var scope = 'user-read-private user-read-email playlist-read-private playlist-modify-private playlist-modify-public';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -86,11 +90,14 @@ app.get('/login', function (req, res) {
       redirect_uri: process.env.REDIRECT_URI,
       state: state
     }));
+console.log(res.data)
+// var localStorage = storage.setItem(access_token, refresh_token)
+
 });
 
 app.get('/callback', function (req, res) {
 
-  // your application requests refresh and access tokens
+  //  application requests refresh and access tokens
   // after checking the state parameter
 
   var code = req.query.code || null;
@@ -137,7 +144,7 @@ app.get('/callback', function (req, res) {
         });
 
         // we can also pass the token to the browser to make requests from there
-        res.redirect('/#' +
+        res.redirect('/?' +
           querystring.stringify({
             access_token: access_token,
             refresh_token: refresh_token
@@ -180,10 +187,38 @@ app.get('/refresh_token', function (req, res) {
 
 console.log('Listening on 3000');
 
+// SPOTIFY API FOR PLAYLIST
+
+app.post('/playlists', function (req, res) {
+  
+  var playlist_url = 'https://api.spotify.com/v1/users/' + process.env.user_id + '/playlists';
+  var authOptions1 = {
+    url: playlist_url,
+    body: JSON.stringify({
+      name: 'name',
+      public: false
+    }),
+    dataType: 'json',
+    headers: {
+      'Authorization': 'Bearer ' + process.env.access_token,
+      'Content-Type': 'application/json',
+    }
+    };
+  request.post(authOptions1, function (err, res, body) {
+    console.log(body);
+  })
+
+  
+});
+
+app.get('/',(req,res)=>{
+  res.json(req.query.access_token)
+})
+
 
 // Starting the server, syncing our models ------------------------------------/
-db.sequelize.sync(syncOptions).then(function() {
-  app.listen(PORT, function() {
+db.sequelize.sync(syncOptions).then(function () {
+  app.listen(PORT, function () {
     console.log(
       "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
       PORT,
@@ -192,5 +227,5 @@ db.sequelize.sync(syncOptions).then(function() {
   });
 });
 
-  
+
 module.exports = app;
