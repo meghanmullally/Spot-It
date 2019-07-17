@@ -30,6 +30,13 @@ app.use(express.urlencoded({
   extended: false
 }));
 app.use(express.json());
+
+app.use(session({
+  secret:'keyboard cat',
+  resave:false,
+  saveUninitialized:true,
+  cookie:{maxAge:60000}
+}))
 app.use(express.static("public"));
 
 // Handlebars
@@ -43,7 +50,7 @@ app.set("view engine", "handlebars");
 
 // Routes
 require("./routes/apiRoutes")(app);
-require("./routes/htmlRoutes")(app);
+// require("./routes/htmlRoutes")(app);
 
 var syncOptions = {
   force: false
@@ -70,7 +77,7 @@ var generateRandomString = function (length) {
 
 var stateKey = 'spotify_auth_state';
 
-var app = express();
+// var app = express();
 
 app.use(express.static(__dirname + '/public'))
   .use(cors())
@@ -91,10 +98,22 @@ app.get('/login', function (req, res) {
       redirect_uri: process.env.REDIRECT_URI,
       state: state
     }));
-console.log(res.data)
+// console.log("SUP", res.data)
 // var localStorage = storage.setItem(access_token, refresh_token)
 
 });
+
+app.get('/readsessions',function(req,res){
+  if(req.session.token){
+    res.json({
+      login:true,
+      token:req.session.token
+    })
+  }
+  else {
+    res.json('not logged in')
+  }
+})
 
 app.get('/callback', function (req, res) {
 
@@ -130,6 +149,7 @@ app.get('/callback', function (req, res) {
 
         var access_token = body.access_token,
           refresh_token = body.refresh_token;
+          req.session.token = access_token;
 
         var options = {
           url: 'https://api.spotify.com/v1/me',
@@ -176,12 +196,16 @@ app.get('/refresh_token', function (req, res) {
     json: true
   };
 
+
+  // grabbing access token and putting it on the body 
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
       var access_token = body.access_token;
+
       res.send({
         'access_token': access_token
       });
+      
     }
   });
 });
@@ -229,4 +253,3 @@ db.sequelize.sync(syncOptions).then(function () {
 });
 
 
-module.exports = app;
