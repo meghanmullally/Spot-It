@@ -11,7 +11,7 @@ module.exports = function(app) {
   });
 
   app.get("/cms", isAuthenticated, function(req, res) {
-    res.sendFile(path.join(__dirname, "../public/cms.html"));
+    res.sendFile(path.join(__dirname, "../public/cms"));
   });
 
   // blog route loads blog.html

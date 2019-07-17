@@ -2,9 +2,16 @@
   <div class="container">
     <div class="row">
       <div class="col-8 offset-2">
-        <h2>Forum List</h2>
-        {{#each forums}}
-        <li>{{name}} {{description}}</li>
+        <h2 class="text-center">Forum List</h2>
+        {{#each forum_data}}
+          <div class="card">
+            <div class="card-body"><b>
+              {{name}}
+              {{description}}
+              {{createdAt}}
+              {{updatedAt}}
+            </b></div>
+          </div>
         {{/each}}
       </div>
     </div>
@@ -12,5 +19,4 @@
 </div>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="/js/index.js"></script>
 <script src="/js/forumcreate.js"></script>

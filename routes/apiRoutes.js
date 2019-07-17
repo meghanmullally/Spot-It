@@ -86,7 +86,7 @@ module.exports = function(app) {
   app.get("/api/forums", function(req, res) {
     db.Forum.findAll({})
       .then(function(dbForum) {
-        res.json(dbForum);
+        res.render("forums" , {forum_data: dbForum});
       });
   });
 
