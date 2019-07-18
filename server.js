@@ -99,7 +99,6 @@ app.get('/login', function (req, res) {
       state: state
     }));
 // console.log("SUP", res.data)
-// var localStorage = storage.setItem(access_token, refresh_token)
 
 });
 
@@ -108,7 +107,10 @@ app.get('/readsessions',function(req,res){
     res.json({
       login:true,
       token:req.session.token
+      
     })
+    var localStorage = storage.setItem(req.session.token)
+
   }
   else {
     res.json('not logged in')
