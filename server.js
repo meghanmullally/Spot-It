@@ -83,7 +83,7 @@ app.use((req, res, next) => {
 
 // Routes
 require("./routes/apiRoutes")(app);
-require("./routes/spotifyRoutes");
+
 // require("./routes/htmlRoutes")(app);
 
 var syncOptions = {
@@ -95,7 +95,6 @@ var syncOptions = {
 if (process.env.NODE_ENV === "test") {
   syncOptions.force = true;
 }
-
 
 // SPOTIFY LOGIN IN AUTHORIZATION CODE 
 
@@ -139,7 +138,7 @@ app.get('/login', function (req, res) {
 app.get('/readsessions',function(req,res){
   if(req.session.token){
     res.json({
-      login:true,
+      userId:req.session.userId,
       token:req.session.token
 
     })
@@ -150,7 +149,7 @@ app.get('/readsessions',function(req,res){
 })
 
 app.get('/callback', function (req, res) {
-
+  console.log('got here');
   //  application requests refresh and access tokens
   // after checking the state parameter
 
@@ -168,23 +167,23 @@ app.get('/callback', function (req, res) {
     var authOptions = {
       url: 'https://accounts.spotify.com/api/token',
       form: {
+        client_id:client_id,
+        client_secret:client_secret,
         code: code,
         redirect_uri: process.env.REDIRECT_URI,
         grant_type: 'authorization_code'
-      },
-      headers: {
-        'Authorization': 'Basic ' + (new Buffer(process.env.client_id + ':' + process.env.client_secret).toString('base64'))
       },
       json: true
     };
 
     request.post(authOptions, function (error, response, body) {
+      console.log(response)
       if (!error && response.statusCode === 200) {
 
         var access_token = body.access_token,
           refresh_token = body.refresh_token;
           req.session.token = access_token;
-
+          console.log(access_token);
         var options = {
           url: 'https://api.spotify.com/v1/me',
           headers: {
@@ -199,7 +198,7 @@ app.get('/callback', function (req, res) {
         });
 
         // we can also pass the token to the browser to make requests from there
-        res.redirect('/?' +
+        res.redirect('/profile/?' +
           querystring.stringify({
             access_token: access_token,
             refresh_token: refresh_token
@@ -207,9 +206,10 @@ app.get('/callback', function (req, res) {
       } else {
         res.redirect('/#' +
           querystring.stringify({
-            error: 'invalid_token'
+            error: 'invalid_token Here1'
           }));
       }
+     
     });
   }
 });
@@ -221,7 +221,7 @@ app.get('/refresh_token', function (req, res) {
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: {
-      'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+      'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
     },
     form: {
       grant_type: 'refresh_token',
@@ -248,9 +248,22 @@ console.log('Listening on 3000');
 
 // SPOTIFY API FOR PLAYLIST
 
+app.get('/playlists',function(req,res){
+  
+  request.get({
+    url:`https://api.spotify.com/v1/users/${req.session.userId}/playlists`,
+    headers:{
+      'Authorization': 'Bearer ' +req.session.token,
+    }
+  },function(err,response,body){
+    let jsonBody = JSON.parse(body);
+    res.send(jsonBody);
+  })
+})
+
 app.post('/playlists', function (req, res) {
   
-  var playlist_url = 'https://api.spotify.com/v1/users/' + process.env.user_id + '/playlists';
+  var playlist_url = 'https://api.spotify.com/v1/users/' + req.session.userId + '/playlists';
   var authOptions1 = {
     url: playlist_url,
     body: JSON.stringify({
@@ -259,16 +272,28 @@ app.post('/playlists', function (req, res) {
     }),
     dataType: 'json',
     headers: {
-      'Authorization': 'Bearer ' + process.env.access_token,
+      'Authorization': 'Bearer ' + req.session.token,
       'Content-Type': 'application/json',
     }
     };
-  request.post(authOptions1, function (err, res, body) {
-    console.log(body);
+  request.post(authOptions1, function (err, response, body) {
+    // console.log(body);
+    
   })
-
-  
 });
+
+app.get('/profile',(req,res)=>{
+  request.get({
+    url:"https://api.spotify.com/v1/me",
+    headers:{
+      'Authorization': 'Bearer ' +req.session.token,
+    }
+  },function(err,response,body){
+    let jsonBody = JSON.parse(body);
+    req.session.userId = jsonBody.id;
+    res.send(jsonBody);
+  })
+})
 
 app.get('/',(req,res)=>{
   res.json(req.query.access_token)
