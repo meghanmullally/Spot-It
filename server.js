@@ -1,4 +1,5 @@
 require("dotenv").config();
+var path = require('path');
 var express = require("express");
 var exphbs = require("express-handlebars");
 
@@ -10,11 +11,15 @@ var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 var session = require('express-session')
 
+var validator = require('express-validator');
+var passport = require("./config/passport");
+const flash = require('connect-flash');
+
 
 var db = require("./models");
 
 var app = express();
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 3008;
 
 
 // Spotify IDs
@@ -35,6 +40,7 @@ app.use(express.urlencoded({
 app.use(express.json());
 
 app.use(session({
+
   secret:'keyboard cat',
   resave:false,
   saveUninitialized:true,
@@ -42,14 +48,38 @@ app.use(session({
 }))
 app.use(express.static("public"));
 
+  secret: 'spotitsecret',
+  saveUninitialized: true,
+  resave: true
+}));
+
+app.use(flash());
+// Passport
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(validator());
+
+
 // Handlebars
 app.engine(
-  "handlebars",
+  "hbs",
   exphbs({
-    defaultLayout: "main"
+    defaultLayout: 'main',
+    layoutsDir: path.join(app.get('views'), 'layouts'),
+    partialsDir: path.join(app.get('views'), 'partials'),
+    extname: '.hbs'
+    //helpers: require('./lib/handlebars')
   })
 );
-app.set("view engine", "handlebars");
+app.set("view engine", "hbs");
+
+// Global variables
+app.use((req, res, next) => {
+  app.locals.message = req.flash('message');
+  app.locals.success = req.flash('success');
+  app.locals.user = req.user;
+  next();
+});
 
 // Routes
 require("./routes/apiRoutes")(app);
@@ -61,7 +91,7 @@ var syncOptions = {
 };
 
 // If running a test, set syncOptions.force to true
-// clearing the `testdb`
+// clearing the database
 if (process.env.NODE_ENV === "test") {
   syncOptions.force = true;
 }
@@ -256,4 +286,7 @@ db.sequelize.sync(syncOptions).then(function () {
   });
 });
 
+
+
+module.exports = app;
 

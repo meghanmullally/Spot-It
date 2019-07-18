@@ -19,7 +19,6 @@ module.exports = function (sequelize, DataTypes) {
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
             validate: {
                 isEmail: true
             }
@@ -33,14 +32,29 @@ module.exports = function (sequelize, DataTypes) {
     var modelOptions = {
         hooks: {
             beforeCreate: hashPassword,
-            beforeUpdate: hashPassword,
-            beforeUpsert: hashPassword
+            beforeUpdate: rehashPassword
         }
     };
 
     function hashPassword (user) {
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
-    }
+    };
+    function rehashPassword (user) {
+        console.log("rehashPassword", user);
+
+        if (user.changed("password") && user.password) {
+            user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
+        }
+    };
+    function hashBulkPassword (users) {
+        console.log(users);
+        for (var i = 0; i < users.length; i++) {
+            var user = users[i];
+            if (user.password) {
+                user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
+            }
+        }
+    };
 
     var User = sequelize.define("User", modelDefinition, modelOptions);
     
