@@ -3,6 +3,7 @@ var express = require("express");
 var exphbs = require("express-handlebars");
 
 // dependencies for spotify 
+var SpotifyWebApi = require('spotify-web-api-node');
 var request = require('request'); // "Request" library
 var cors = require('cors');
 var querystring = require('querystring');
@@ -19,11 +20,13 @@ var PORT = process.env.PORT || 3000;
 // Spotify IDs
 
 // client id
+
 var client_id = process.env.CLIENT_ID;
 // secret id
 var client_secret = process.env.CLIENT_SECRET;
 // redirect uri
 var redirect_uri = process.env.REDIRECT_URI;
+
 
 // Middleware
 app.use(express.urlencoded({
@@ -50,6 +53,7 @@ app.set("view engine", "handlebars");
 
 // Routes
 require("./routes/apiRoutes")(app);
+require("./routes/spotifyRoutes");
 // require("./routes/htmlRoutes")(app);
 
 var syncOptions = {
@@ -107,10 +111,8 @@ app.get('/readsessions',function(req,res){
     res.json({
       login:true,
       token:req.session.token
-      
-    })
-    var localStorage = storage.setItem(req.session.token)
 
+    })
   }
   else {
     res.json('not logged in')
@@ -141,7 +143,7 @@ app.get('/callback', function (req, res) {
         grant_type: 'authorization_code'
       },
       headers: {
-        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+        'Authorization': 'Basic ' + (new Buffer(process.env.client_id + ':' + process.env.client_secret).toString('base64'))
       },
       json: true
     };
