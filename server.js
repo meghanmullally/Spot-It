@@ -73,18 +73,6 @@ app.use((req, res, next) => {
 
 
 
-// app.use(session({
-//   secret: 'keyboard cat',
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: {
-//     maxAge: 60000
-//   }
-// }))
-
-// app.use(express.static("public"));
-
-
 // Routes
 require("./routes/apiRoutes")(app);
 require("./routes/htmlRoutes")(app);

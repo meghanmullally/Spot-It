@@ -46,12 +46,6 @@ module.exports = function (app) {
     });
 
 
-  })
-
-  })
-}
-  
-
     app.get("/forums", function (req, res) {
       res.render('forums')
     })
