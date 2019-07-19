@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!-- Template by Quackit.com -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>Spot-IT</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS: You can use this stylesheet to override any Bootstrap styles and/or apply your own styles -->
+    <link href="css/homestyle.css" rel="stylesheet">
+
+
+
+</head>
+
+<body>
+    
+    
+     <body style="background-color:black"
+   
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Logo and responsive toggle -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                
+                </a>
+            </div>
+      
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+	<div class="jumbotron feature">
+		<div class="container">
+            <h1><span class="glyphicon glyphicon-equalizer"></span> <b>Privacy</b></h1>
+            <div ng-if="UserInfo.approvedTermsAndConditions || !UserInfo.isAuthenticated">
+                <ncy-breadcrumb></ncy-breadcrumb>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <form name="tandc" ng-submit="approveTandC()">
+                            <div class="panel panel-default" style="margin-top:20px;">
+                                <div class="panel-body" style="max-height:600px; overflow-y:scroll; background-color:white;">
+                                    <div style="text-align:center;">
+                                        
+                                        <p>These Website Standard Terms And Conditions (these “Terms” or these “Website Standard Terms And Conditions”) contained herein on this webpage, shall govern your use of this website, including all pages within this website (collectively referred to herein below as this “Website”). These Terms apply in full force and effect to your use of this Website and by using this Website, you expressly accept all terms and conditions contained herein in full. You must not use this Website, if you have any objection to any of these Website Standard Terms And Conditions.
+            
+                                            This Website is not for use by any minors (defined as those who are not at least 18 years of age), and you must not use this Website if you a minor.
+                                            
+                                            Other than content you own, which you may have opted to include on this Website, under these Terms, [Sender.Company] and/or its licensors own all rights to the intellectual property and material contained in this Website, and all such rights are reserved. You are granted a limited license only, subject to the restrictions provided in these Terms, for purposes of viewing the material contained on this Website.
+            
+            
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align:center;" ng-if="settings.Authentication.RequireTermsAndConditions && !UserInfo.approvedTermsAndConditions && UserInfo.isAuthenticated">
+                                <button style="margin:20px;" class="btn btn-primary" type="submit">Agree to Privacy Policy</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>

@@ -7,15 +7,8 @@ module.exports = function(sequelize, DataTypes) {
         len: [1]
       }
     },
-    user: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [1]
-      }
-    },
     body: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
         len: [1]
@@ -26,6 +19,10 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: "Discussion"
     }
   });
+    Post.associate = function(models){
+    Post.belongsTo(models.User);
+    Post.belongsTo(models.Forum);
+  }
   return Post;
   };
 
