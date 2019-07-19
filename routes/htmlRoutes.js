@@ -18,6 +18,9 @@ module.exports = function (app) {
 
   app.get("/cms", isAuthenticated, function (req, res) {
 
+    res.sendFile(path.join(__dirname, "../public/cms"));
+  });
+
 
     app.get("/", isAuthenticated, function (req, res) {
       res.sendFile(path.join(__dirname, "../public/blog.html"));
@@ -45,7 +48,7 @@ module.exports = function (app) {
 
     app.get("/playlists", (req, res) => {
       res.render("spotify");
-
+    })
       app.get("/forums", function (req, res) {
         res.render('forums');
       })
