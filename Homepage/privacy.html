@@ -85,7 +85,7 @@
 
 	<div class="jumbotron feature">
 		<div class="container">
-            <h1><span class="glyphicon glyphicon-equalizer"></span> <b>Terms & Conditions</b></h1>
+            <h1><span class="glyphicon glyphicon-equalizer"></span> <b>Privacy</b></h1>
             <div ng-if="UserInfo.approvedTermsAndConditions || !UserInfo.isAuthenticated">
                 <ncy-breadcrumb></ncy-breadcrumb>
             </div>
@@ -109,7 +109,7 @@
                                 </div>
                             </div>
                             <div style="text-align:center;" ng-if="settings.Authentication.RequireTermsAndConditions && !UserInfo.approvedTermsAndConditions && UserInfo.isAuthenticated">
-                                <button style="margin:20px;" class="btn btn-primary" type="submit">Agree to Terms & Conditions</button>
+                                <button style="margin:20px;" class="btn btn-primary" type="submit">Agree to Privacy Policy</button>
                             </div>
                         </form>
                     </div>
