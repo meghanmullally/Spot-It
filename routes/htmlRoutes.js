@@ -46,11 +46,7 @@ module.exports = function (app) {
     });
 
 
-  })
 
-  })
-}
-  
 
     app.get("/forums", function (req, res) {
       res.render('forums')
@@ -74,7 +70,7 @@ module.exports = function (app) {
           },
           include: [db.Post]
         }).then(function (dbForum) {
-          console.log(dbForum.Posts)
+          console.log(dbForum)
           // res.json(dbForum);
           res.render("forum-page", { forum_data: dbForum });
         });

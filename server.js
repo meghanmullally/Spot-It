@@ -97,7 +97,7 @@ var syncOptions = {
   force: false
 };
 
-  syncOptions.force = true;
+  syncOptions.force = false;
 
 
 // Starting the server, syncing our models ------------------------------------/
