@@ -1,0 +1,39 @@
+<style type="stylesheet">
+  .embed-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    height: auto;
+    margin: 40px;
+  }
+
+  .embed-container iframe,
+  .embed-container object,
+  .embed-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+  }
+
+</style>
+
+<body>
+  <div class="container">
+    <h1>Spotify Playlist</h1>
+
+
+<div class='embed-container'>
+    {{!-- <iframe src='https://embed.spotify.com/?uri=' frameborder='0' allowtransparency='true'></iframe> --}}
+</div>
+
+   
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+      integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="/js/spotify.js"></script>
+
+</body>
