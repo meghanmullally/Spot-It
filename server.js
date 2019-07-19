@@ -8,7 +8,7 @@ var request = require('request'); // "Request" library
 var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
-var session = require('express-session')
+var session = require('express-session');
 
 var validator = require('express-validator');
 var passport = require("./config/passport");
@@ -25,6 +25,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 60000
+  }
+}))
+
+app.use(session({
+  secret: 'spotitsecret',
+  resave: true,
+  saveUninitialized: true
+}));
+
+app.use(express.static("public"));
+
 app.use(flash());
 // Passport
 app.use(passport.initialize());
@@ -35,16 +52,16 @@ app.use(validator());
 // Handlebars
 
 app.engine(
-  "hbs",
+  "handlebars",
   exphbs({
     defaultLayout: 'main',
     layoutsDir: path.join(app.get('views'), 'layouts'),
-    partialsDir: path.join(app.get('views'), 'partials'),
-    extname: '.hbs'
+    partialsDir: path.join(app.get('views'), 'partials')
+    // extname: '.hbs'
     //helpers: require('./lib/handlebars')
   })
 );
-app.set("view engine", "hbs");
+app.set("view engine", "handlebars");
 
 // Global variables
 app.use((req, res, next) => {
@@ -66,7 +83,6 @@ app.use((req, res, next) => {
 // }))
 
 // app.use(express.static("public"));
-
 
 
 // Routes
