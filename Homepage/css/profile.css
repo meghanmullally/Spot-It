@@ -5,7 +5,7 @@
     width: 635px;
 
 /* For visibility. Delete me */
-border: 1px solid red;
+border: 1px solid black;
 }
 
 #RightCol
@@ -20,7 +20,7 @@ border: 1px solid red;
     margin-left: 20px;
 
 /* For visibility. Delete me */
-border: 1px solid brown;
+border: 1px solid black;
 }
 
 #Photo
