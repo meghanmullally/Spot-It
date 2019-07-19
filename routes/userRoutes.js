@@ -1,9 +1,15 @@
 var db = require("../models");
 var passport = require("../config/passport");
+var express = require("express");
+var session = require('express-session')
 
 var isAuthenticated = require("../config/middleware/isAuthenticated");
 
 module.exports = function (app) {
+    
+    
+
+    
     app.get("/signup", function (req, res) {
         if (req.user) {
             res.redirect("/");
@@ -177,7 +183,7 @@ module.exports = function (app) {
             }
 
             return;
-            db.User.update({
+        db.User.update({
                     password: newPassword
                 }, {
                     where: {

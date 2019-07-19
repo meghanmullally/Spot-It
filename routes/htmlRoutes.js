@@ -16,6 +16,14 @@ module.exports = function (app) {
 
   });
 
+
+  
+  app.get("/", isAuthenticated, function (req, res) {
+    res.sendFile(path.join(__dirname, "../public/blog.html"));
+
+  });
+
+
   app.get("/cms", isAuthenticated, function (req, res) {
 
     res.sendFile(path.join(__dirname, "../public/cms"));
@@ -37,6 +45,12 @@ module.exports = function (app) {
       res.sendFile(path.join(__dirname, "../public/blog.html"));
     });
 
+
+  })
+
+  })
+}
+  
 
     app.get("/forums", function (req, res) {
       res.render('forums')
@@ -66,3 +80,4 @@ module.exports = function (app) {
         });
 
       })};
+

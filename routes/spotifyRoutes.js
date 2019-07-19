@@ -23,16 +23,16 @@ var redirect_uri = process.env.REDIRECT_URI;
 module.exports = function (app) {
 
 
-  app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 60000
-    }
-  }))
+  // app.use(session({
+  //   secret: 'keyboard cat',
+  //   resave: false,
+  //   saveUninitialized: true,
+  //   cookie: {
+  //     maxAge: 60000
+  //   }
+  // }))
 
-  app.use(express.static("public"));
+  // app.use(express.static("public"));
 
 
   // SPOTIFY LOGIN IN AUTHORIZATION CODE 
@@ -58,7 +58,7 @@ module.exports = function (app) {
 
   // spotify log in authorization 
   // redirected to accounts.spotify.com/authorize? so the user is able to connect to their account 
-  app.get('/login', function (req, res) {
+  app.get('/spotify-login', function (req, res) {
 
     var state = generateRandomString(16);
     res.cookie(stateKey, state);
@@ -219,7 +219,7 @@ module.exports = function (app) {
   app.post('/playlists', function (req, res) {
 
     //var playlist_url = 'https://api.spotify.com/v1/users/' + req.session.userId + '/playlists';
-    var playlist_url = 'https://api.spotify.com/v1/users/1223543784 /playlists';
+    var playlist_url = 'https://api.spotify.com/v1/users/1223543784/playlists';
     var authOptions1 = {
       url: playlist_url,
       body: JSON.stringify({
