@@ -40,9 +40,9 @@ module.exports = function (sequelize, DataTypes) {
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
     };
     function rehashPassword (user) {
-        console.log(user);
+        console.log("rehashPassword", user);
 
-        if (user.password) {
+        if (user.changed("password") && user.password) {
             user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
         }
     };
