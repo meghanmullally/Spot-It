@@ -86,12 +86,8 @@ require("./routes/apiRoutes")(app);
 var syncOptions = {
   force: false
 };
-
-// If running a test, set syncOptions.force to true
-// clearing the database
-if (process.env.NODE_ENV === "test") {
   syncOptions.force = true;
-}
+
 
 // SPOTIFY LOGIN IN AUTHORIZATION CODE 
 
