@@ -75,12 +75,15 @@ module.exports = function (app) {
         res.json(dbPost);
       });
   });
+
   app.post("/api/forums", function (req, res) {
+
     console.log(req.body);
     db.Forum.create({
       name: req.body.name,
       description: req.body.description
     })
+
       .then(function (dbForum) {
         res.json(dbForum);
       });
@@ -89,10 +92,12 @@ module.exports = function (app) {
     db.Forum.findAll({})
       .then(function (dbForum) {
         res.render("forums", { forum_data: dbForum });
+
       });
   });
 
   // Get route for retrieving a single post
+
   app.get("/api/forums/:id", function (req, res) {
     db.Forum.findOne({
       where: {
@@ -101,6 +106,7 @@ module.exports = function (app) {
       include:[db.Post]
     })
       .then(function (dbForum) {
+
         res.json(dbForum);
       });
   });
