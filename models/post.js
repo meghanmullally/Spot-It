@@ -19,6 +19,10 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: "Discussion"
     }
   });
+    Post.associate = function(models){
+    Post.belongsTo(models.User);
+    Post.belongsTo(models.Forum);
+  }
   return Post;
   };
 

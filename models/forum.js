@@ -15,6 +15,12 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
+  Forum.associate = function(models){
+    Forum.hasMany(models.Post, {
+      onDelete: "cascade"
+    });
+    Forum.belongsTo(models.User);
+  }
   return Forum;
   };
 
