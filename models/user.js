@@ -61,6 +61,15 @@ module.exports = function (sequelize, DataTypes) {
     User.prototype.isPasswordValid = function (password) {
         return bcrypt.compareSync(password, this.password);
     }
+    User.associate = function(models){
+        User.hasMany(models.Post, {
+            onDelete: "cascade"
+        });
+        User.hasMany(models.Forum, {
+            onDelete: "cascade"
+        });
+        
+      }
 
     return User;
 };

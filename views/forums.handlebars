@@ -3,15 +3,18 @@
     <div class="row">
       <div class="col-8 offset-2">
         <h2 class="text-center">Forum List</h2>
+        <a class="btn btn-light" href="/forum.html">New Forum</a>
         {{#each forum_data}}
-          <div class="card">
-            <div class="card-body"><b>
-              {{name}}
-              {{description}}
-              {{createdAt}}
-              {{updatedAt}}
-            </b></div>
+        <div class="card text-center">
+          <div class="card-header">
+            <h3><b>{{name}}</b></h3>
           </div>
+          <div class="card-body">
+            <h5 class="card-title">{{description}}</h5>
+            <p class="card-text">{{createdAt}}<br>{{updatedAt}}</p>
+            <a href="/forums/{{name}}" class="btn btn-light">Forum Page</a>
+          </div>
+        </div>
         {{/each}}
       </div>
     </div>
