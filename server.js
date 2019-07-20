@@ -22,26 +22,25 @@ var PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(
-  session({
-    secret: "keyboard cat",
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 60000
-    }
-  })
-);
+app.use(express.static("public"));
+
+//app.use(
+//  session({
+//    secret: "keyboard cat",
+//    resave: false,
+//    saveUninitialized: true,
+//    cookie: {
+//      maxAge: 60000
+//    }
+//  })
+//); // No reason to add session middleware twice, call with spotitsecret secret has to stay
 
 app.use(
   session({
     secret: "spotitsecret",
     resave: true,
     saveUninitialized: true
-  })
-);
-
-app.use(express.static("public"));
+}));
 
 app.use(flash());
 // Passport
@@ -71,15 +70,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use(session({
-//   secret: "keyboard cat",
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: {
-//     maxAge: 60000
-//   }
-// }))
-
 // app.use(express.static("public"));
 
 // Routes
@@ -87,8 +77,6 @@ require("./routes/userRoutes")(app);
 require("./routes/apiRoutes")(app);
 require("./routes/htmlRoutes")(app);
 require("./routes/spotifyRoutes")(app);
-
-// require("./routes/htmlRoutes")(app);
 
 var syncOptions = {
   force: false

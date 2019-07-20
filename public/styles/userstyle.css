@@ -14,15 +14,19 @@ h3 {
 }
 
 .navbar {
-    background: rgb(8, 114, 13) !important;
+    background: rgb(63, 65, 64) !important;
 }
 
 .nav-link {
-    color: rgb(2, 29, 12) !important;
+    color: rgb(162, 173, 166) !important;
+}
+
+.navbar-brand {
+  color: rgb(22, 153, 29) !important;
 }
 
 .masthead {
-    color: rgb(255, 255, 255);
+    color: rgb(166, 219, 170);
     min-height: 20rem;
     width: 100%;
     height: 100%;
