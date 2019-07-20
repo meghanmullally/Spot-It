@@ -14,16 +14,16 @@ module.exports = function (app) {
     
     app.get("/signup", function (req, res) {
         if (req.user) {
-            res.redirect("/");
+            res.redirect("/home");
             return;
         }
 
         res.status(200).render("auth/signup");
     });
 
-    app.post("/signup", function (req, res) {
+    app.post("/signup", function (req, res, next) {
         if (req.user) {
-            res.redirect("/");
+            res.redirect("/home");
             return;
         }
 
@@ -43,25 +43,31 @@ module.exports = function (app) {
             return;
         }
 
-        db.User.create({
-                userName: req.body.user_name,
-                firstName: req.body.first_name,
-                lastName: req.body.last_name,
-                email: req.body.email,
-                password: req.body.password
-            })
-            .then(function () {
-                res.redirect("/");
-            })
-            .catch(function (err) {
-                console.log(err);
-                res.render(401); // unauthorized
-            });
+        passport.authenticate("local.signup", function(err, user, info) {
+            if (err) {
+                console.log("Error: ", err);
+                return next(err);
+            }
+            if (!user) {
+                return res.redirect("/login");
+            }
+
+            req.logIn(user, function(err) {
+                console.log("Signup user: ", req.user);
+
+                if (err) {
+                    return next(err);
+                }
+
+                return res.redirect("/home");
+              });
+
+        })(req, res, next);
     });
 
     app.get("/login", function (req, res) {
         if (req.user) {
-            res.redirect("/");
+            res.redirect("/home");
             return;
         }
 
@@ -85,7 +91,7 @@ module.exports = function (app) {
             return;
         }
 
-        passport.authenticate("local", function(err, user, info) {
+        passport.authenticate("local.login", function(err, user, info) {
             if (err) {
                 console.log("Error: ", err);
                 return next(err);
@@ -95,13 +101,13 @@ module.exports = function (app) {
             }
 
             req.logIn(user, function(err) {
+                console.log("Login user: ", req.user);
+
                 if (err) {
                     return next(err);
                 }
 
-                //return res.redirect("/blog");
                 return res.redirect("/home");
-
               });
 
         })(req, res, next);
@@ -109,6 +115,8 @@ module.exports = function (app) {
     });
 
     app.get("/userprofile", isAuthenticated, function (req, res) {
+        console.log("User profile, user: ", req.user);
+
         var user = {
             id: req.user.id,
             userName: req.user.userName,
@@ -143,9 +151,9 @@ module.exports = function (app) {
             })
             .then(function (rowsUpdated) {
 
-                req.user.firstName=newInfo.firstName;
-                req.user.lastName=newInfo.lastName;
-                req.user.email=newInfo.email;
+                req.user.firstName = newInfo.firstName;
+                req.user.lastName = newInfo.lastName;
+                req.user.email = newInfo.email;
 
                 res.redirect(302, "userprofile");
             })

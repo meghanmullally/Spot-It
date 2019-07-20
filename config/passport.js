@@ -3,7 +3,7 @@ var LocalStrategy = require("passport-local").Strategy;
 
 var db = require("../models");
 
-passport.use("local", new LocalStrategy({
+passport.use("local.login", new LocalStrategy({
         usernameField: "user_name",
         passwordField: "password",
         passReqToCallback: true
@@ -32,6 +32,41 @@ passport.use("local", new LocalStrategy({
                 done(err)
             });
     }
+));
+
+passport.use("local.signup", new LocalStrategy({
+        usernameField: "user_name",
+        passwordField: "password",
+        passReqToCallback: true
+    },
+    function (req, userName, password, done) {
+
+        db.User.findOrCreate(
+            {
+                where: {
+                    userName: req.body.user_name
+                },
+                defaults: {
+                    userName: req.body.user_name,
+                    firstName: req.body.first_name,
+                    lastName: req.body.last_name,
+                    email: req.body.email,
+                    password: req.body.password
+                }
+            })
+        .then(function (users, created) {
+            if (!users[0]) {
+                return done(null, false, req.flash("message", "Cannot find or create user."));
+            }
+
+            return done(null, users[0], req.flash("success", "Welcome!"));
+        })
+        .catch(function(err) {
+            console.log(err);
+            done(err)
+        });
+    }
+
 ));
 
 passport.serializeUser(function (user, cb) {
