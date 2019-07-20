@@ -16,7 +16,6 @@ module.exports = function (app) {
 
   });
 
-
   
   app.get("/", isAuthenticated, function (req, res) {
     res.sendFile(path.join(__dirname, "../public/blog.html"));

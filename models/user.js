@@ -40,19 +40,8 @@ module.exports = function (sequelize, DataTypes) {
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
     };
     function rehashPassword (user) {
-        console.log("rehashPassword", user);
-
         if (user.changed("password") && user.password) {
             user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
-        }
-    };
-    function hashBulkPassword (users) {
-        console.log(users);
-        for (var i = 0; i < users.length; i++) {
-            var user = users[i];
-            if (user.password) {
-                user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
-            }
         }
     };
 
