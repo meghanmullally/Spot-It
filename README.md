@@ -5,7 +5,7 @@
 ### DEMO
 Github Repository: https://github.com/meghanmullally/Spot-It
 
-Live Heroku Link: 
+Live Heroku Link: https://thawing-waters-46482.herokuapp.com/
 
 
 ### Purpose and Usefulness
@@ -19,6 +19,7 @@ Spot-It gives you the best of all music in one place!  Allowing users to create 
   * jQuery
   * Heroku
   * Login Authentication
+  * Handlebars
   
 ### NPM Modules Used
     bcryptjs

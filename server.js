@@ -3,7 +3,7 @@ var path = require("path");
 var request = require("request");
 var express = require("express");
 var exphandlebars = require("express-handlebars");
- // "Request" library
+// "Request" library
 var cors = require("cors");
 var querystring = require("querystring");
 var cookieParser = require("cookie-parser");
@@ -21,7 +21,6 @@ var PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
 app.use(express.static("public"));
 
 //app.use(
@@ -40,7 +39,7 @@ app.use(
     secret: "spotitsecret",
     resave: true,
     saveUninitialized: true
-}));
+  }));
 
 app.use(flash());
 // Passport
@@ -85,8 +84,8 @@ var syncOptions = {
 syncOptions.force = false;
 
 // Starting the server, syncing our models ------------------------------------/
-db.sequelize.sync(syncOptions).then(function() {
-  app.listen(PORT, function() {
+db.sequelize.sync(syncOptions).then(function () {
+  app.listen(PORT, function () {
     console.log(
       "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
       PORT,
