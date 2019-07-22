@@ -152,7 +152,6 @@ module.exports = function (app) {
         //       error: 'invalid_token'
         //     }));
         // }
-
       });
     }
   });
