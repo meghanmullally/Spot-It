@@ -2,26 +2,28 @@ var db = require("../models");
 var passport = require("../config/passport");
 var express = require("express");
 var session = require('express-session')
+var path = require("path");
 
 var isAuthenticated = require("../config/middleware/isAuthenticated");
 
 module.exports = function (app) {
     
-    
-
+    app.get("/home", isAuthenticated, function (req, res) {
+        res.redirect("Home.html");
+    });
     
     app.get("/signup", function (req, res) {
         if (req.user) {
-            res.redirect("/");
+            res.redirect("/home");
             return;
         }
 
         res.status(200).render("auth/signup");
     });
 
-    app.post("/signup", function (req, res) {
+    app.post("/signup", function (req, res, next) {
         if (req.user) {
-            res.redirect("/");
+            res.redirect("/home");
             return;
         }
 
@@ -41,25 +43,31 @@ module.exports = function (app) {
             return;
         }
 
-        db.User.create({
-                userName: req.body.user_name,
-                firstName: req.body.first_name,
-                lastName: req.body.last_name,
-                email: req.body.email,
-                password: req.body.password
-            })
-            .then(function () {
-                res.redirect(302, "/login"); // temporary redirect
-            })
-            .catch(function (err) {
-                console.log(err);
-                res.render(401); // unauthorized
-            });
+        passport.authenticate("local.signup", function(err, user, info) {
+            if (err) {
+                console.log("Error: ", err);
+                return next(err);
+            }
+            if (!user) {
+                return res.redirect("/login");
+            }
+
+            req.logIn(user, function(err) {
+                console.log("Signup user: ", req.user);
+
+                if (err) {
+                    return next(err);
+                }
+
+                return res.redirect("/home");
+              });
+
+        })(req, res, next);
     });
 
     app.get("/login", function (req, res) {
         if (req.user) {
-            res.redirect("/");
+            res.redirect("/home");
             return;
         }
 
@@ -83,7 +91,7 @@ module.exports = function (app) {
             return;
         }
 
-        passport.authenticate("local", function(err, user, info) {
+        passport.authenticate("local.login", function(err, user, info) {
             if (err) {
                 console.log("Error: ", err);
                 return next(err);
@@ -91,22 +99,24 @@ module.exports = function (app) {
             if (!user) {
                 return res.redirect("/login");
             }
-            console.log("User: ", user);
-            console.log("Info: ", info);
 
             req.logIn(user, function(err) {
+                console.log("Login user: ", req.user);
+
                 if (err) {
                     return next(err);
                 }
 
-                return res.redirect("/blog");
+                return res.redirect("/home");
               });
 
         })(req, res, next);
 
     });
 
-    app.get("/profile", isAuthenticated, function (req, res) {
+    app.get("/userprofile", isAuthenticated, function (req, res) {
+        console.log("User profile, user: ", req.user);
+
         var user = {
             id: req.user.id,
             userName: req.user.userName,
@@ -115,12 +125,12 @@ module.exports = function (app) {
             email: req.user.email
         };
 
-        res.status(200).render("profile", {
+        res.status(200).render("userprofile", {
             user: user
         });
     });
 
-    app.post("/profile", isAuthenticated, function (req, res) {
+    app.post("/userprofile", isAuthenticated, function (req, res) {
         var userId = req.user.id;
 
         var newInfo = {
@@ -141,18 +151,18 @@ module.exports = function (app) {
             })
             .then(function (rowsUpdated) {
 
-                req.user.firstName=newInfo.firstName;
-                req.user.lastName=newInfo.lastName;
-                req.user.email=newInfo.email;
+                req.user.firstName = newInfo.firstName;
+                req.user.lastName = newInfo.lastName;
+                req.user.email = newInfo.email;
 
-                res.redirect(302, "/profile");
+                res.redirect(302, "userprofile");
             })
             .catch(function (err) {
                 console.log(err);
             });
     });
 
-    app.get("/editprofile", isAuthenticated, function (req, res) {
+    app.get("/edituserprofile", isAuthenticated, function (req, res) {
         var user = {
             id: req.user.id,
             userName: req.user.userName,
@@ -161,41 +171,8 @@ module.exports = function (app) {
             email: req.user.email
         };
 
-        res.status(200).render("editprofile", {
+        res.status(200).render("edituserprofile", {
             user: user
-        });
-    });
-
-    app.get("/changepassword", isAuthenticated, function (req, res) {
-        res.status(200).render("changePassword");
-    });
-
-    app.post("/changepassword", isAuthenticated, function (req, res) {
-        var userId = req.user.id;
-        var oldPassword = req.body.oPassword;
-        var newPassword = req.body.nPassword;
-
-        db.User.findByPk(userId).then(function (user) {
-            if (!user.isPasswordValid(oldPassword)) {
-                req.logout();
-                req.redirect(302, "/login");
-                return;
-            }
-
-            return;
-        db.User.update({
-                    password: newPassword
-                }, {
-                    where: {
-                        id: user.id
-                    }
-                })
-                .then(function () {
-                    res.redirect(302, "/changepassword"); // temporary redirect
-                })
-                .catch(function (err) {
-                    res.render(401); // unauthorized
-                });
         });
     });
 
