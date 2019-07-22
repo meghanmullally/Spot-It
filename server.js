@@ -56,8 +56,8 @@ app.engine(
   exphbs({
     defaultLayout: 'main',
     layoutsDir: path.join(app.get('views'), 'layouts'),
-    partialsDir: path.join(app.get('views'), 'partials')
-    // extname: '.hbs'
+    partialsDir: path.join(app.get('views'), 'partials'),
+    extname: 'handlebars'
     //helpers: require('./lib/handlebars')
   })
 );
